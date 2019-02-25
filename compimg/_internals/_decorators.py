@@ -1,15 +1,17 @@
-import inspect
 import functools
-import collections
+import inspect
 import numpy as np
 
+from collections import OrderedDict
+from inspect import BoundArguments
 
-def are_arrays_of_the_same_shape(func):
+
+def raise_when_arrays_have_different_shapes(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         signature = inspect.signature(func)
-        bound_arguments: inspect.BoundArguments = signature.bind(*args, **kwargs)
-        all_args: collections.OrderedDict = bound_arguments.arguments
+        bound_arguments: BoundArguments = signature.bind(*args, **kwargs)
+        all_args: OrderedDict = bound_arguments.arguments
         image: np.ndarray = all_args.get("image")
         reference: np.ndarray = all_args.get("reference")
         if image.shape != reference.shape:
@@ -19,12 +21,12 @@ def are_arrays_of_the_same_shape(func):
     return wrapper
 
 
-def are_arrays_of_the_same_dtype(func):
+def raise_when_arrays_have_different_dtypes(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         signature = inspect.signature(func)
-        bound_arguments: inspect.BoundArguments = signature.bind(*args, **kwargs)
-        all_args: collections.OrderedDict = bound_arguments.arguments
+        bound_arguments: BoundArguments = signature.bind(*args, **kwargs)
+        all_args: OrderedDict = bound_arguments.arguments
         image: np.ndarray = all_args.get("image")
         reference: np.ndarray = all_args.get("reference")
         if image.dtype != reference.dtype:
