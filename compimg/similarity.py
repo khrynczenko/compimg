@@ -18,7 +18,6 @@ class SimilarityMetric(abc.ABC):
         :param reference: Image that we compare to.
         :return: Numerical result of the comparison.
         """
-        pass
 
 
 class MSE(SimilarityMetric):

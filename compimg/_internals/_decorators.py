@@ -4,6 +4,7 @@ import numpy as np
 
 from collections import OrderedDict
 from inspect import BoundArguments
+from compimg.exceptions import DifferentShapesError, DifferentDTypesError
 
 
 def raise_when_arrays_have_different_shapes(func):
@@ -15,7 +16,7 @@ def raise_when_arrays_have_different_shapes(func):
         image: np.ndarray = all_args.get("image")
         reference: np.ndarray = all_args.get("reference")
         if image.shape != reference.shape:
-            raise ValueError("Both images must be of the same shape.")
+            raise DifferentShapesError(image.shape, reference.shape)
         return func(*bound_arguments.args, **bound_arguments.kwargs)
 
     return wrapper
@@ -30,7 +31,7 @@ def raise_when_arrays_have_different_dtypes(func):
         image: np.ndarray = all_args.get("image")
         reference: np.ndarray = all_args.get("reference")
         if image.dtype != reference.dtype:
-            raise ValueError("Both images must be of the same dtype.")
+            raise DifferentDTypesError(image.dtype, reference.dtype)
         return func(*bound_arguments.args, **bound_arguments.kwargs)
 
     return wrapper
