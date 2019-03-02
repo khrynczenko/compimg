@@ -14,6 +14,7 @@ class SimilarityMetric(abc.ABC):
     def compare(self, image: np.ndarray, reference: np.ndarray) -> float:
         """
         Performs comparison.
+
         :param image: Image that is being compared.
         :param reference: Image that we compare to.
         :return: Numerical result of the comparison.
@@ -21,7 +22,10 @@ class SimilarityMetric(abc.ABC):
 
 
 class MSE(SimilarityMetric):
-    """Mean squared error"""
+    """
+    Mean squared error.
+
+    """
 
     @_decorators.raise_when_arrays_have_different_dtypes
     @_decorators.raise_when_arrays_have_different_shapes
@@ -30,8 +34,10 @@ class MSE(SimilarityMetric):
 
 
 class PSNR(SimilarityMetric):
-    """Peak signal-to-noise ratio according to
-        https://en.wikipedia.org/wiki/Peak_signal-to-noise_ratio
+    """
+    Peak signal-to-noise ratio according to
+        https://en.wikipedia.org/wiki/Peak_signal-to-noise_ratio.
+
     """
 
     @_decorators.raise_when_arrays_have_different_dtypes
@@ -48,7 +54,10 @@ class PSNR(SimilarityMetric):
 class SlidingWindow(abc.ABC):
     @abc.abstractmethod
     def slide(self, image: np.ndarray) -> Generator[np.ndarray, None, None]:
-        """Should return fragments of a given image."""
+        """
+        Should return fragments of a given image.
+
+        """
 
 
 Rows, Columns = int, int
@@ -61,7 +70,6 @@ class DefaultSlidingWindow(SlidingWindow):
         self._stride = stride
 
     def slide(self, image: np.ndarray) -> Generator[np.ndarray, None, None]:
-        """Should return fragments of a given image."""
         starting_row_indices = range(0, image.shape[0], self._stride[0])
         starting_column_indices = range(0, image.shape[1], self._stride[1])
         starting_row_indices = itertools.takewhile(
@@ -80,7 +88,8 @@ class DefaultSlidingWindow(SlidingWindow):
 class SSIM(SimilarityMetric):
     """
     Structural similarity index according to
-        https://ipfs.io/ipfs/QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco/wiki/Structural_similarity.html
+    https://ipfs.io/ipfs/QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco/wiki/Structural_similarity.html.
+
     """
 
     def __init__(self, k1: float = 0.01, k2: float = 0.03,
