@@ -24,6 +24,8 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
+            pip install --upgrade pip
+            pip install --upgrade setuptools
             pip install pytest
             pip install flake8
             pip install sphinx
