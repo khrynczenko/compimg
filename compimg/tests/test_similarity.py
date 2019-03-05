@@ -60,13 +60,13 @@ class TestPSNR:
 
 class TestSSIM:
     def test_compare_returns_one_when_images_are_identical(self):
-        reference_image = np.ones((10, 10))
+        reference_image = np.ones((10, 10, 3))
         value = SSIM().compare(reference_image, reference_image)
         assert value == 1.0
 
     def test_compare_returns_minus_one_when_images_are_completely_different(
             self):
-        image = np.full((10, 10), fill_value=255, dtype=np.uint8)
-        reference_image = np.zeros((10, 10), dtype=np.uint8)
+        image = np.full((10, 10, 3), fill_value=255, dtype=np.uint8)
+        reference_image = np.zeros((10, 10, 3), dtype=np.uint8)
         value = SSIM().compare(image, reference_image)
         assert round(value, 2) == 0.00
