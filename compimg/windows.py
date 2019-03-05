@@ -18,7 +18,8 @@ class SlidingWindow(abc.ABC):
         """
 
 
-Rows, Columns = int, int
+Rows = int
+Columns = int
 
 
 class DefaultSlidingWindow(SlidingWindow):
@@ -28,15 +29,15 @@ class DefaultSlidingWindow(SlidingWindow):
         self._stride = stride
 
     def slide(self, image: np.ndarray) -> Generator[np.ndarray, None, None]:
-        starting_row_indices = range(0, image.shape[0], self._stride[0])
-        starting_column_indices = range(0, image.shape[1], self._stride[1])
+        starting_rows_range = range(0, image.shape[0], self._stride[0])
+        starting_columns_range = range(0, image.shape[1], self._stride[1])
         starting_row_indices = itertools.takewhile(
             lambda index: index + self._size[0] <= image.shape[0],
-            starting_row_indices
+            starting_rows_range
         )
         starting_column_indices = itertools.takewhile(
             lambda index: index + self._size[1] <= image.shape[1],
-            starting_column_indices
+            starting_columns_range
         )
         for i, j in itertools.product(starting_row_indices,
                                       starting_column_indices):
