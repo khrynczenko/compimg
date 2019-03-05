@@ -4,16 +4,9 @@
 #
 version: 2
 jobs:
-  build:
+  build-python35:
     docker:
-      # specify the version you desire here
-      # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
-      - image: circleci/python:3.6.1
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
+      - image: circleci/python:3.5
 
     working_directory: ~/repo
 
@@ -38,11 +31,6 @@ jobs:
             . venv/bin/activate
             pip install -e .
 
-      # run tests!
-      # this example uses Django's built-in test-runner
-      # other common Python testing frameworks include pytest and nose
-      # https://pytest.org
-      # https://nose.readthedocs.io
       - run:
           name: run tests
           command: |
@@ -69,3 +57,116 @@ jobs:
             . venv/bin/activate
             flake8 compimg
 
+  build-python36:
+    docker:
+      - image: circleci/python:3.6.1
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - run:
+          name: set venv and deps
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install --upgrade pip
+            pip install --upgrade setuptools
+            pip install m2r
+            pip install pytest
+            pip install flake8
+            pip install sphinx
+
+      - run:
+          name: install
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -e .
+
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            pytest .
+
+      - run:
+          name: run docs tests
+          command: |
+            . venv/bin/activate
+            cd docs/src
+            sphinx-build -b doctest . "../build"
+
+      - run:
+          name: build docs
+          command: |
+            . venv/bin/activate
+            cd docs/src
+            sphinx-build -b html . "../buildhtml"
+
+      - run:
+          name: run flake
+          command: |
+            . venv/bin/activate
+            flake8 compimg
+
+  build-python37:
+    docker:
+      - image: circleci/python:3.7
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - run:
+          name: set venv and deps
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install --upgrade pip
+            pip install --upgrade setuptools
+            pip install m2r
+            pip install pytest
+            pip install flake8
+            pip install sphinx
+
+      - run:
+          name: install
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -e .
+
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            pytest .
+
+      - run:
+          name: run docs tests
+          command: |
+            . venv/bin/activate
+            cd docs/src
+            sphinx-build -b doctest . "../build"
+
+      - run:
+          name: build docs
+          command: |
+            . venv/bin/activate
+            cd docs/src
+            sphinx-build -b html . "../buildhtml"
+
+      - run:
+          name: run flake
+          command: |
+            . venv/bin/activate
+            flake8 compimg
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build-python35
+      - build-python36
+      - build-python37
