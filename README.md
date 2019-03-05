@@ -5,8 +5,8 @@ Develop: [![CircleCI](https://circleci.com/gh/JenioPY/compimg/tree/develop.svg?s
 ## Introduction  
 Image similarity metrics are often used in image quality assessment for performance
 evaluation of image restoration and reconstruction algorithms. They require two images:
- - test image (image of interest)
- - reference image (image we compare against)  
+- test image (image of interest)
+- reference image (image we compare against)  
 Such metrics produce numerical value.
  
 Such methods are are widely called full/reduced-reference methods for 
@@ -23,6 +23,11 @@ to asses image quality.
 ## Installation
 `compimg` is available on PyPI. You can install it using pip:  
 `pip install compimg`
+
+## Note 
+Keep in mind that metric are not aware of what you are passing. If 
+metric relies on intensity values and you have YCbCr image you should pass
+only the first channel to the computing routine.
 
 ## Help
 If you have any problems or questions please post an issue.
