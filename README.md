@@ -24,5 +24,10 @@ to asses image quality.
 `compimg` is available on PyPI. You can install it using pip:  
 `pip install compimg`
 
+## Note 
+Keep in mind that metric are not aware of what you are passing. If 
+metric relies on intensity values and you have YCbCr image you should pass
+only the first channel to the computing routine.
+
 ## Help
 If you have any problems or questions please post an issue.
