@@ -5,8 +5,8 @@ Develop: [![CircleCI](https://circleci.com/gh/JenioPY/compimg/tree/develop.svg?s
 ## Introduction  
 Image similarity metrics are often used in image quality assessment for performance
 evaluation of image restoration and reconstruction algorithms. They require two images:
- - test image (image of interest)
- - reference image (image we compare against)  
+- test image (image of interest)
+- reference image (image we compare against)  
 Such metrics produce numerical value.
  
 Such methods are are widely called full/reduced-reference methods for 
