@@ -28,4 +28,10 @@ compimg.similarity module
     :undoc-members:
     :show-inheritance:
 
+compimg.windows module
+-------------------------
 
+.. automodule:: compimg.windows
+    :members:
+    :undoc-members:
+    :show-inheritance:
