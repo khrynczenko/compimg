@@ -17,6 +17,8 @@ sys.path.append(".")
 sys.path.append("../..")
 sys.path.append("../")
 sys.path.append("../../../")
+sys.path.append("../../../../")
+sys.path.append("compimg")
 
 from setuptools import config
 
