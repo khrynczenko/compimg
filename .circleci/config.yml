@@ -20,6 +20,7 @@ jobs:
             pip install --upgrade pip
             pip install --upgrade setuptools
             pip install m2r
+            pip install wheel
             pip install pytest
             pip install flake8
             pip install sphinx
@@ -79,6 +80,7 @@ jobs:
             pip install --upgrade pip
             pip install --upgrade setuptools
             pip install m2r
+            pip install wheel
             pip install pytest
             pip install flake8
             pip install sphinx
