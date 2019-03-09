@@ -20,6 +20,7 @@ jobs:
             pip install --upgrade pip
             pip install --upgrade setuptools
             pip install m2r
+            pip install wheel
             pip install pytest
             pip install flake8
             pip install sphinx
@@ -50,6 +51,12 @@ jobs:
             . venv/bin/activate
             cd docs/src
             sphinx-build -b html . "../buildhtml"
+
+      - run:
+          name: run sdist bdist
+          command: |
+            . venv/bin/activate
+            python3 setup.py sdist bdist_wheel
 
       - run:
           name: run flake
@@ -73,6 +80,7 @@ jobs:
             pip install --upgrade pip
             pip install --upgrade setuptools
             pip install m2r
+            pip install wheel
             pip install pytest
             pip install flake8
             pip install sphinx
@@ -103,6 +111,12 @@ jobs:
             . venv/bin/activate
             cd docs/src
             sphinx-build -b html . "../buildhtml"
+
+      - run:
+          name: run sdist bdist
+          command: |
+            . venv/bin/activate
+            python3 setup.py sdist bdist_wheel
 
       - run:
           name: run flake
