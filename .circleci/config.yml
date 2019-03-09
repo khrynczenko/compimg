@@ -52,6 +52,12 @@ jobs:
             sphinx-build -b html . "../buildhtml"
 
       - run:
+          name: run sdist bdist
+          command: |
+            . venv/bin/activate
+            python3 setup.py sdist bdist_wheel
+
+      - run:
           name: run flake
           command: |
             . venv/bin/activate
@@ -103,6 +109,12 @@ jobs:
             . venv/bin/activate
             cd docs/src
             sphinx-build -b html . "../buildhtml"
+
+      - run:
+          name: run sdist bdist
+          command: |
+            . venv/bin/activate
+            python3 setup.py sdist bdist_wheel
 
       - run:
           name: run flake
