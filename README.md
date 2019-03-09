@@ -3,7 +3,9 @@ Develop: [![CircleCI](https://circleci.com/gh/JenioPY/compimg/tree/develop.svg?s
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Documentation Status](https://readthedocs.org/projects/compimg/badge/?version=latest)](https://compimg.readthedocs.io/en/latest/?badge=latest)
 
+
 ## Introduction
+##### For full documentation visit [documentation site](https://compimg.readthedocs.io).
 Image similarity metrics are often used in image quality assessment for performance
 evaluation of image restoration and reconstruction algorithms. They require two images:
 - test image (image of interest)
