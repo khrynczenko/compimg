@@ -4,8 +4,9 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Documentation Status](https://readthedocs.org/projects/compimg/badge/?version=latest)](https://compimg.readthedocs.io/en/latest/?badge=latest)
   
-[![CircleCI](https://circleci.com/gh/JenioPY/compimg/tree/master.svg?style=svg)](https://circleci.com/gh/JenioPY/compimg/tree/master)
-[![CircleCI](https://circleci.com/gh/JenioPY/compimg/tree/develop.svg?style=svg)](https://circleci.com/gh/JenioPY/compimg/tree/develop)
+Branches:  
+master: [![CircleCI](https://circleci.com/gh/JenioPY/compimg/tree/master.svg?style=svg)](https://circleci.com/gh/JenioPY/compimg/tree/master)  
+develop: [![CircleCI](https://circleci.com/gh/JenioPY/compimg/tree/develop.svg?style=svg)](https://circleci.com/gh/JenioPY/compimg/tree/develop)
 
 
 ## Introduction
