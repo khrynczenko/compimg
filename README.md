@@ -1,4 +1,5 @@
-![PyPI](https://img.shields.io/pypi/v/compimg.svg)
+# compimg
+[PyPI](https://img.shields.io/pypi/v/compimg.svg)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/compimg.svg)
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/compimg.svg)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)

@@ -1,2 +1,2 @@
-m2r
+recommonmark
 numpy >=1.15.4, <2.0.0

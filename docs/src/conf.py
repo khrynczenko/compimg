@@ -13,12 +13,19 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import sys
+
 sys.path.append(".")
 sys.path.append("../..")
 sys.path.append("../")
 
 from setuptools import config
+import os
+import shutil
 
+for entry in os.scandir("../../"):
+    if str(entry.name).endswith(".md"):
+        shutil.copyfile(entry.path,
+                        os.path.join(os.path.dirname(__file__), entry.name))
 
 cfg = config.read_configuration("../../setup.cfg")["metadata"]
 # -- Project information -----------------------------------------------------
@@ -46,7 +53,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.todo',
     'sphinx.ext.doctest',
-    'm2r',
+    'recommonmark',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
