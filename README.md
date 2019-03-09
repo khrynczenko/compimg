@@ -31,7 +31,7 @@ from compimg.similarity import SSIM
 some_grayscale_image = np.ones((20,20), dtype=np.uint8)
 identical_image = np.ones((20,20), dtype=np.uint8)
 result = SSIM().compare(some_grayscale_image, identical_image)
-# result == 1.0
+assert result == 1.0
 ```
 
 ## Features  
@@ -43,8 +43,8 @@ result = SSIM().compare(some_grayscale_image, identical_image)
 `pip install compimg`
 
 ## Note 
-Keep in mind that metric are not aware of what you are passing. If 
-metric relies on intensity values and you have YCbCr image you should pass
+Keep in mind that metrics are not aware of what kind of image you are passing. 
+If metric relies on intensity values and you have YCbCr image you should pass
 only the first channel to the computing routine.
 
 ## Help
