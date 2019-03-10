@@ -1,11 +1,18 @@
-Master: [![CircleCI](https://circleci.com/gh/JenioPY/compimg/tree/master.svg?style=svg&circle-token=08abd49c539289429775861727cae51269c6db2c)](https://circleci.com/gh/JenioPY/compimg/tree/master) 
-Develop: [![CircleCI](https://circleci.com/gh/JenioPY/compimg/tree/develop.svg?style=svg&circle-token=08abd49c539289429775861727cae51269c6db2c)](https://circleci.com/gh/JenioPY/compimg/tree/develop)
+# compimg
+![PyPI](https://img.shields.io/pypi/v/compimg.svg)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/compimg.svg)
+![PyPI - Wheel](https://img.shields.io/pypi/wheel/compimg.svg)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Documentation Status](https://readthedocs.org/projects/compimg/badge/?version=latest)](https://compimg.readthedocs.io/en/latest/?badge=latest)
+  
+Branches:  
+master: [![CircleCI](https://circleci.com/gh/JenioPY/compimg/tree/master.svg?style=svg)](https://circleci.com/gh/JenioPY/compimg/tree/master)  
+develop: [![CircleCI](https://circleci.com/gh/JenioPY/compimg/tree/develop.svg?style=svg)](https://circleci.com/gh/JenioPY/compimg/tree/develop)
 
 
 ## Introduction
-##### For full documentation visit [documentation site](https://compimg.readthedocs.io).
+**_For full documentation visit [documentation site](https://compimg.readthedocs.io)._**  
+
 Image similarity metrics are often used in image quality assessment for performance
 evaluation of image restoration and reconstruction algorithms. They require two images:
 - test image (image of interest)
@@ -26,7 +33,7 @@ from compimg.similarity import SSIM
 some_grayscale_image = np.ones((20,20), dtype=np.uint8)
 identical_image = np.ones((20,20), dtype=np.uint8)
 result = SSIM().compare(some_grayscale_image, identical_image)
-# result == 1.0
+assert result == 1.0
 ```
 
 ## Features  
@@ -38,8 +45,8 @@ result = SSIM().compare(some_grayscale_image, identical_image)
 `pip install compimg`
 
 ## Note 
-Keep in mind that metric are not aware of what you are passing. If 
-metric relies on intensity values and you have YCbCr image you should pass
+Keep in mind that metrics are not aware of what kind of image you are passing. 
+If metric relies on intensity values and you have YCbCr image you should pass
 only the first channel to the computing routine.
 
 ## Help

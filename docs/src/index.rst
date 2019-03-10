@@ -10,10 +10,10 @@ Welcome to compimg's documentation!
    :maxdepth: 4
    :caption: Contents:
 
-   readme
+   README.md
    compimg
    license
-
+   CHANGELOG.md
 
 
 Indices and tables
