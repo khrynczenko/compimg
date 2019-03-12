@@ -64,8 +64,7 @@ class TestSSIM:
         value = SSIM().compare(reference_image, reference_image)
         assert value == 1.0
 
-    def test_compare_returns_minus_one_when_images_are_completely_different(
-            self):
+    def test_compare_returns_zero_when_images_are_completely_different(self):
         image = np.full((10, 10, 3), fill_value=255, dtype=np.uint8)
         reference_image = np.zeros((10, 10, 3), dtype=np.uint8)
         value = SSIM().compare(image, reference_image)
