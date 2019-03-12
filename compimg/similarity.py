@@ -52,8 +52,9 @@ class PSNR(SimilarityMetric):
 
 class SSIM(SimilarityMetric):
     """
-    Structural similarity index according to
-    https://ipfs.io/ipfs/QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco/wiki/Structural_similarity.html.
+    Structural similarity index according to the paper from 2004
+    "Image Quality Assessment: From Error Visibility to Structural Similarity"
+    by Wang et al.
 
     """
 
@@ -69,20 +70,20 @@ class SSIM(SimilarityMetric):
     def compare(self, image: np.ndarray, reference: np.ndarray) -> float:
         image_windows = self._sliding_window.slide(image)
         reference_windows = self._sliding_window.slide(reference)
-        windows_ssims = []
+        windows_results = []
         for window, reference_window in zip(image_windows, reference_windows):
-            windows_ssims.append(self._calculate_ssim(window,
-                                                      reference_window))
-        return np.mean(windows_ssims)
+            windows_results.append(self._calculate_on_window(window,
+                                                             reference_window))
+        return np.mean(windows_results)
 
-    def _calculate_ssim(self, image: np.ndarray,
-                        reference: np.ndarray) -> float:
+    def _calculate_on_window(self, image: np.ndarray,
+                             reference: np.ndarray) -> float:
         x_avg = image.mean()
         y_avg = reference.mean()
-        x_var = image.var()
-        y_var = reference.var()
+        x_var = np.sum((image - x_avg) ** 2) / (image.size - 1)
+        y_var = np.sum((reference - y_avg) ** 2) / (reference.size - 1)
         x_y_cov = (np.sum(image - x_avg) * np.sum(reference - y_avg)
-                   / image.size)
+                   / (image.size - 1))
         _, maximum_pixel_value = _utilities.get_dtype_range(image.dtype)
         c1 = (self._k1 * maximum_pixel_value) ** 2
         c2 = (self._k2 * maximum_pixel_value) ** 2
