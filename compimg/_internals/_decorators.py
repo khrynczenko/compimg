@@ -7,7 +7,7 @@ from inspect import BoundArguments
 from compimg.exceptions import DifferentShapesError, DifferentDTypesError
 
 
-def raise_when_arrays_have_different_shapes(func):
+def _raise_when_arrays_have_different_shapes(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         signature = inspect.signature(func)
@@ -22,7 +22,7 @@ def raise_when_arrays_have_different_shapes(func):
     return wrapper
 
 
-def raise_when_arrays_have_different_dtypes(func):
+def _raise_when_arrays_have_different_dtypes(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         signature = inspect.signature(func)
