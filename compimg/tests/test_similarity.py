@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from compimg.similarity import MSE, PSNR, SSIM
+from compimg.similarity import MSE, MAE, PSNR, SSIM
 from compimg.exceptions import DifferentDTypesError, DifferentShapesError
 
 
@@ -21,7 +21,7 @@ def image():
     ], dtype=np.uint8)
 
 
-@pytest.mark.parametrize("metric", [MSE(), PSNR(), SSIM()])
+@pytest.mark.parametrize("metric", [MSE(), MAE(), PSNR(), SSIM()])
 def test_if_different_shapes_guard_raises(metric):
     wrong_shape_x = np.zeros((10, 10, 2))
     wrong_shape_y = np.zeros((20, 20, 2))
@@ -29,7 +29,7 @@ def test_if_different_shapes_guard_raises(metric):
         metric.compare(wrong_shape_x, wrong_shape_y)
 
 
-@pytest.mark.parametrize("metric", [MSE(), PSNR(), SSIM()])
+@pytest.mark.parametrize("metric", [MSE(), MAE(), PSNR(), SSIM()])
 def test_if_different_dtypes_guard_raises(metric):
     wrong_dtype_x = np.zeros((10, 10, 2), dtype=np.float32)
     wrong_dtype_y = np.zeros((10, 10, 2), dtype=np.uint8)
@@ -44,6 +44,16 @@ class TestMSE:
 
     def test_compare_returns_zero_when_identical_images(self, reference_image):
         value = MSE().compare(reference_image, reference_image)
+        assert value == 0.0
+
+
+class TestMAE:
+    def test_compare_returns_correct_result(self, image, reference_image):
+        value = MAE().compare(image, reference_image)
+        assert round(value, 2) == 0.67
+
+    def test_compare_returns_zero_when_identical_images(self, reference_image):
+        value = MAE().compare(reference_image, reference_image)
         assert value == 0.0
 
 
