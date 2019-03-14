@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from compimg.similarity import MSE, MAE, PSNR, SSIM
+from compimg.similarity import MSE, RMSE, MAE, PSNR, SSIM
 from compimg.exceptions import DifferentDTypesError, DifferentShapesError
 
 
@@ -44,6 +44,16 @@ class TestMSE:
 
     def test_compare_returns_zero_when_identical_images(self, reference_image):
         value = MSE().compare(reference_image, reference_image)
+        assert value == 0.0
+
+
+class TestRMSE:
+    def test_compare_returns_correct_result(self, image, reference_image):
+        value = RMSE().compare(image, reference_image)
+        assert round(value, 2) == 1.15
+
+    def test_compare_returns_zero_when_identical_images(self, reference_image):
+        value = RMSE().compare(reference_image, reference_image)
         assert value == 0.0
 
 
