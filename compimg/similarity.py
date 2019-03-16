@@ -6,6 +6,12 @@ from numbers import Real
 from compimg._internals import _decorators, _utilities
 from compimg.windows import SlidingWindow, DefaultSlidingWindow
 
+# This is type that is used for all the calculations (images are
+# converted into it if necessary, for example when overflow or underflow
+# would occur due to calculations).
+# Change only if you know what you are doing.
+intermediate_type: np.dtype = np.float64
+
 
 class SimilarityMetric(abc.ABC):
     """
@@ -33,8 +39,8 @@ class MSE(SimilarityMetric):
     @_decorators._raise_when_arrays_have_different_dtypes
     @_decorators._raise_when_arrays_have_different_shapes
     def compare(self, image: np.ndarray, reference: np.ndarray) -> float:
-        image = image.astype(np.float64, copy=False)
-        reference = reference.astype(np.float64, copy=False)
+        image = image.astype(intermediate_type, copy=False)
+        reference = reference.astype(intermediate_type, copy=False)
         return np.mean(((reference - image) ** 2))
 
 
@@ -47,8 +53,8 @@ class RMSE(SimilarityMetric):
     @_decorators._raise_when_arrays_have_different_dtypes
     @_decorators._raise_when_arrays_have_different_shapes
     def compare(self, image: np.ndarray, reference: np.ndarray) -> float:
-        image = image.astype(np.float64, copy=False)
-        reference = reference.astype(np.float64, copy=False)
+        image = image.astype(intermediate_type, copy=False)
+        reference = reference.astype(intermediate_type, copy=False)
         return np.sqrt(MSE().compare(image, reference))
 
 
@@ -61,15 +67,15 @@ class MAE(SimilarityMetric):
     @_decorators._raise_when_arrays_have_different_dtypes
     @_decorators._raise_when_arrays_have_different_shapes
     def compare(self, image: np.ndarray, reference: np.ndarray) -> float:
-        image = image.astype(np.float64, copy=False)
-        reference = reference.astype(np.float64, copy=False)
+        image = image.astype(intermediate_type, copy=False)
+        reference = reference.astype(intermediate_type, copy=False)
         return np.mean(np.abs(reference - image))
 
 
 class PSNR(SimilarityMetric):
     """
     Peak signal-to-noise ratio according to
-        https://en.wikipedia.org/wiki/Peak_signal-to-noise_ratio.
+    https://en.wikipedia.org/wiki/Peak_signal-to-noise_ratio.
 
     """
 
@@ -77,8 +83,8 @@ class PSNR(SimilarityMetric):
     @_decorators._raise_when_arrays_have_different_shapes
     def compare(self, image: np.ndarray, reference: np.ndarray) -> float:
         image_original_dtype = image.dtype
-        image = image.astype(np.float64, copy=False)
-        reference = reference.astype(np.float64, copy=False)
+        image = image.astype(intermediate_type, copy=False)
+        reference = reference.astype(intermediate_type, copy=False)
         mse = MSE().compare(image, reference)
         if mse == 0.0:
             return float("inf")
@@ -106,8 +112,8 @@ class SSIM(SimilarityMetric):
     @_decorators._raise_when_arrays_have_different_shapes
     def compare(self, image: np.ndarray, reference: np.ndarray) -> float:
         _, max_pixel_value = _utilities.get_dtype_range(image.dtype)
-        image = image.astype(np.float64, copy=False)
-        reference = reference.astype(np.float64, copy=False)
+        image = image.astype(intermediate_type, copy=False)
+        reference = reference.astype(intermediate_type, copy=False)
         image_windows = self._sliding_window.slide(image)
         reference_windows = self._sliding_window.slide(reference)
         windows_results = []
