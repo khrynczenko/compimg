@@ -21,4 +21,16 @@ MSE = 1.0
 PSNR = 48.1308036086791
 SSIM = 0.8667110963012329
 
+compimg implicitly converts image to intermediate type (float64) to avoid
+overflow/underflow when doing calculation. Its advised to leave this type as
+is, albeit it is possible to change it. For example you could sacrafice
+precision to improve processing speed by changing it to float32 or even
+float16.
+
+>>> import numpy as np
+>>> import compimg.similarity
+>>> compimg.similarity.intermediate_type = np.float32
+>>> # code that uses similarity metrics
+
+
 """

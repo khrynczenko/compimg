@@ -1,8 +1,8 @@
 compimg package
 ===============
 
-Contents
---------
+Usage
+-----
 
 .. automodule:: compimg
     :members:
