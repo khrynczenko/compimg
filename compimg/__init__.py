@@ -8,7 +8,8 @@ Here is the simple example of how one can compare one image to another.
 >>> MSE().compare(img, img)
 0.0
 
-For multiple metrics you could run:
+All metrics implement single interface so it is easy to use multiple of them
+for example you could run:
 
 >>> import numpy as np
 >>> from compimg.similarity import MSE, PSNR, SSIM

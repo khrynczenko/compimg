@@ -3,7 +3,7 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/compimg.svg)
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/compimg.svg)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Documentation Status](https://readthedocs.org/projects/compimg/badge/?version=stable)](https://compimg.readthedocs.io/en/latest/?badge=stable)
+[![Documentation Status](https://readthedocs.org/projects/compimg/badge/?version=stable)](https://compimg.readthedocs.io/en/stable/?badge=stable)
   
 Branches:  
 master: [![CircleCI](https://circleci.com/gh/khrynczenko/compimg/tree/master.svg?style=svg)](https://circleci.com/gh/khrynczenko/compimg/tree/master)  
