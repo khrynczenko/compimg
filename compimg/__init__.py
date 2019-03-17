@@ -16,11 +16,11 @@ for example you could run:
 >>> for metric in [MSE(), PSNR(), SSIM()]:
 ...     img = np.ones((10,10), dtype = np.uint8)
 ...     reference = np.zeros((10,10), dtype = np.uint8)
-...     value = metric.compare(img, reference)
+...     value = round(metric.compare(img, reference), 2)
 ...     print(f"{metric.__class__.__name__} = {value}")
 MSE = 1.0
-PSNR = 48.1308036086791
-SSIM = 0.8667110963012329
+PSNR = 48.13
+SSIM = 0.87
 
 compimg implicitly converts image to intermediate type (float64) to avoid
 overflow/underflow when doing calculation. Its advised to leave this type as

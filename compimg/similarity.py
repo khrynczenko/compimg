@@ -98,6 +98,8 @@ class SSIM(SimilarityMetric):
     Structural similarity index according to the paper from 2004
     "Image Quality Assessment: From Error Visibility to Structural Similarity"
     by Wang et al.
+    In case you would like to change alpha, beta and gamma parameters you
+    could change private attributes _alpha. _beta and _gamma respectively.
 
     """
 
@@ -106,6 +108,9 @@ class SSIM(SimilarityMetric):
                      size=(8, 8), stride=(1, 1))):
         self._k1 = k1
         self._k2 = k2
+        self._alpha = 1
+        self._beta = 1
+        self._gamma = 1
         self._sliding_window = sliding_window
 
     @_decorators._raise_when_arrays_have_different_dtypes
@@ -130,12 +135,17 @@ class SSIM(SimilarityMetric):
         y_avg = reference.mean()
         x_var = np.sum((image - x_avg) ** 2) / (image.size - 1)
         y_var = np.sum((reference - y_avg) ** 2) / (reference.size - 1)
+        x_var_square_root = np.sqrt(x_var)
+        y_var_square_root = np.sqrt(y_var)
         x_y_cov = (np.sum(image - x_avg) * np.sum(reference - y_avg)
                    / (image.size - 1))
         c1 = (self._k1 * float(max_pixel_value)) ** 2
         c2 = (self._k2 * float(max_pixel_value)) ** 2
-        nominator = (2.0 * x_avg * y_avg + c1) * (2.0 * x_y_cov + c2)
-        denominator = (x_avg ** 2 + y_avg ** 2 + c1) * (
-                x_var ** 2 + y_var ** 2 + c2)
-        ssim = nominator / denominator
-        return ssim
+        c3 = c2 / 2
+        luminance = (2 * x_avg * y_avg + c1) / (x_avg ** 2 + y_avg ** 2 + c1)
+        contrast = (2 * x_var_square_root * y_var_square_root + c2) / (
+                x_var + y_var + c2)
+        structure = (x_y_cov + c3) / (
+                x_var_square_root * y_var_square_root + c3)
+        return luminance ** self._alpha * contrast ** self._beta * (
+                structure ** self._gamma)
