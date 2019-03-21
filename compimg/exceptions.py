@@ -14,3 +14,9 @@ class DifferentDTypesError(Exception):
     def __init__(self, dtype1: np.dtype, dtype2: np.dtype):
         super().__init__(
             f"Images have different dtypes: {dtype1.name} != {dtype2.name}.")
+
+
+class NegativePadAmountError(Exception):
+    def __init__(self, amount):
+        super().__init__(
+            f"Pad cannot be negative value like {amount}.")

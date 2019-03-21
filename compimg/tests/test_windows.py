@@ -1,14 +1,14 @@
 import numpy as np
 
-from compimg.windows import DefaultSlidingWindow
+from compimg.windows import IdentitySlidingWindow
 
 
-class TestDefaultSlidingWindow:
+class TestIdentitySlidingWindow:
     def test_slide_correctness(self):
         input_image = np.array([[1, 2, 3],
                                 [4, 5, 6],
                                 [7, 8, 9]])
-        slider = DefaultSlidingWindow((2, 2), (1, 1))
+        slider = IdentitySlidingWindow((2, 2), (1, 1))
         slides = list(slider.slide(input_image))
         assert len(slides) == 4
         assert np.array_equal(slides[0], np.array([[1, 2],

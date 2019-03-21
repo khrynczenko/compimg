@@ -6,25 +6,32 @@ import abc
 import itertools
 import numpy as np
 
-from numbers import Number
 from typing import Generator, Tuple
 from compimg._internals import _utilities
+from compimg.pads import Pad, ConstantPad
+
+Rows = int
+Columns = int
 
 
 class SlidingWindow(abc.ABC):
     @abc.abstractmethod
     def slide(self, image: np.ndarray) -> Generator[np.ndarray, None, None]:
         """
-        Should return fragments of a given image.
+        Using some windows slides over image returning its changed/unchanged
+        fragments.
 
+        :param image: Image to slide over.
+        :return: Generator that returns views returned by window.
         """
 
 
-Rows = int
-Columns = int
+class IdentitySlidingWindow(SlidingWindow):
+    """
+    Slides through the image without making any changes.
 
+    """
 
-class DefaultSlidingWindow(SlidingWindow):
     def __init__(self, size: Tuple[Rows, Columns],
                  stride: Tuple[Rows, Columns]):
         self._size = size
@@ -46,46 +53,12 @@ class DefaultSlidingWindow(SlidingWindow):
             yield image[i:i + self._size[0], j:j + self._size[1]]
 
 
-class BorderSolution(abc.ABC):
-    """
-    When performing convolution one needs to decide what to do filter is near
-    border(s). Instances implementing this class address that problem.
-    """
-
-    @abc.abstractmethod
-    def apply(self, image: np.ndarray) -> np.ndarray:
-        """Applies solution"""
-
-
-class Pad(BorderSolution):
-    """
-    Adds rows/columns of zeros at the edges of an image.
-    """
-
-    def __init__(self, value: Number, amount: int):
-        """
-        :param value: Value to pad with.
-        :param amount: Amount of rows/columns to be added.
-        """
-        self._value = value
-        self._amount = amount
-
-    def apply(self, image: np.ndarray) -> np.ndarray:
-        image_shape_with_zero_border = list(image.shape)
-        image_shape_with_zero_border[0] = image_shape_with_zero_border[0] + 2
-        image_shape_with_zero_border[1] = image_shape_with_zero_border[1] + 2
-        zero_pad = np.full(image_shape_with_zero_border, self._value,
-                           dtype=image.dtype)
-        zero_pad[1:-1, 1:-1] = image
-        return zero_pad
-
-
 class KernelApplyingSlidingWindow(SlidingWindow):
 
     def __init__(self, kernel: np.ndarray,
-                 border_solution: BorderSolution = Pad(0, 1)):
+                 pad: Pad = ConstantPad(0, 1)):
         self._kernel = kernel
-        self._border_solution = border_solution
+        self._pad = pad
 
     def slide(self, image: np.ndarray) -> Generator[np.ndarray, None, None]:
         original_dtype = image.dtype
@@ -93,13 +66,12 @@ class KernelApplyingSlidingWindow(SlidingWindow):
         kernel = self._kernel.astype(np.float64)
         if image.ndim == 3 and kernel.ndim == 2:
             kernel = self._replicate(kernel, 3)
-        slider = DefaultSlidingWindow(kernel.shape[:2], (1, 1))
-        filtered_image = self._border_solution.apply(image)
+        slider = IdentitySlidingWindow(kernel.shape[:2], (1, 1))
+        filtered_image = self._pad.apply(image)
         min, max = _utilities.get_dtype_range(original_dtype)
-        return (np.sum((slide.ravel() * kernel.ravel())).clip(min, max).astype(
-            original_dtype)
-            for slide in
-            slider.slide(filtered_image))
+        return (np.sum(slide * kernel).clip(min, max).astype(original_dtype)
+                for slide in
+                slider.slide(filtered_image))
 
     def _replicate(self, array: np.ndarray, dim: int) -> np.ndarray:
         new = np.zeros((array.shape[0], array.shape[1], dim),

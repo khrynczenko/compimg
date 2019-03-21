@@ -4,7 +4,7 @@ import numpy as np
 
 from numbers import Real
 from compimg._internals import _decorators, _utilities
-from compimg.windows import SlidingWindow, DefaultSlidingWindow
+from compimg.windows import SlidingWindow, IdentitySlidingWindow
 
 # This is type that is used for all the calculations (images are
 # converted into it if necessary, for example when overflow or underflow
@@ -104,7 +104,7 @@ class SSIM(SimilarityMetric):
     """
 
     def __init__(self, k1: float = 0.01, k2: float = 0.03,
-                 sliding_window: SlidingWindow = DefaultSlidingWindow(
+                 sliding_window: SlidingWindow = IdentitySlidingWindow(
                      size=(8, 8), stride=(1, 1))):
         self._k1 = k1
         self._k2 = k2
