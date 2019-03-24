@@ -14,26 +14,31 @@ def get_borders_as_1d_list(image: np.ndarray) -> List[Number]:
 
 class TestFromFunctionPad:
     def test_if_pads_correctly(self):
-        identity_function = lambda x: x
-        pad = FromFunctionPad(identity_function)
+        pad = FromFunctionPad(lambda x: x)
         image = np.ones((3, 3))
         assert np.array_equal(pad.apply(image), image)
 
 
 class TestConstantPad:
 
-    @pytest.mark.parametrize("value, amount", [
-        (0, 1),
-        (0, 2),
-        (0, 0),
-        (1, 1),
+    @pytest.mark.parametrize("value, amount, image_shape", [
+        (0, 1, (3, 3)),
+        (0, 2, (3, 3)),
+        (0, 0, (3, 3)),
+        (1, 1, (3, 3)),
+        (0, 1, (3, 3, 3)),
+        (0, 2, (3, 3, 3)),
+        (0, 0, (3, 3, 3)),
+        (1, 1, (3, 3, 3)),
     ])
-    def test_if_pads_correctly_with_usual_parameters(self, value, amount):
+    def test_if_pads_correctly_with_usual_parameters(self, value, amount,
+                                                     image_shape):
         pad = ConstantPad(value, amount)
-        image = np.ones((3, 3))
+        image = np.ones(image_shape)
         padded_image = pad.apply(image)
-        expected_sum = 9 + sum(
-            [value * (2 ** (3 + amount)) for _ in range(amount)])
+        channels = 3 if image.ndim == 3 else 1
+        expected_sum = (image.size * 1) + sum(
+            [value * (2 ** (3 + amount)) * channels for _ in range(amount)])
         assert expected_sum == np.sum(padded_image)
 
     def test_if_raises_when_initialized_with_negative_amount(self):

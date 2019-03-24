@@ -20,3 +20,11 @@ class NegativePadAmountError(Exception):
     def __init__(self, amount):
         super().__init__(
             f"Pad cannot be negative value like {amount}.")
+
+
+class KernelBiggerThanImageError(Exception):
+    def __init__(self, kernel_shape: Sequence[int],
+                 image_shape: Sequence[int]):
+        super().__init__(
+            f"\nKernel used in convolution must be bigger that image itself."
+            f"Kernel shape = {kernel_shape}, Image shape = {image_shape}")

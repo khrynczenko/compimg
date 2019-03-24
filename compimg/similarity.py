@@ -3,8 +3,11 @@ import abc
 import numpy as np
 
 from numbers import Real
+from compimg import kernels
 from compimg._internals import _decorators, _utilities
-from compimg.windows import SlidingWindow, IdentitySlidingWindow
+from compimg.pads import EdgePad
+from compimg.windows import SlidingWindow, IdentitySlidingWindow, \
+    GaussianSlidingWindow
 
 # This is type that is used for all the calculations (images are
 # converted into it if necessary, for example when overflow or underflow
@@ -104,8 +107,8 @@ class SSIM(SimilarityMetric):
     """
 
     def __init__(self, k1: float = 0.01, k2: float = 0.03,
-                 sliding_window: SlidingWindow = IdentitySlidingWindow(
-                     size=(8, 8), stride=(1, 1))):
+                 sliding_window: SlidingWindow = GaussianSlidingWindow(
+                     shape=(11, 11), stride=(1, 1), sigma=1.5)):
         self._k1 = k1
         self._k2 = k2
         self._alpha = 1
@@ -147,5 +150,76 @@ class SSIM(SimilarityMetric):
                 x_var + y_var + c2)
         structure = (x_y_cov + c3) / (
                 x_var_square_root * y_var_square_root + c3)
+        return luminance ** self._alpha * contrast ** self._beta * (
+                structure ** self._gamma)
+
+
+class GSSIM(SimilarityMetric):
+    """
+    Gradien-Based Structural similarity index according to the paper
+    "GRADIENT-BASED STRUCTURAL SIMILARITY FOR IMAGE QUALITY ASSESSMENT"
+    by Chen et al.
+    In case you would like to change alpha, beta and gamma parameters you
+    could change private attributes _alpha. _beta and _gamma respectively.
+
+    """
+
+    def __init__(self, k1: float = 0.01, k2: float = 0.03,
+                 sliding_window: SlidingWindow = GaussianSlidingWindow(
+                     shape=(11, 11), stride=(1, 1), sigma=1.5)):
+        self._k1 = k1
+        self._k2 = k2
+        self._alpha = 1
+        self._beta = 1
+        self._gamma = 1
+        self._sliding_window = sliding_window
+
+    @_decorators._raise_when_arrays_have_different_dtypes
+    @_decorators._raise_when_arrays_have_different_shapes
+    def compare(self, image: np.ndarray, reference: np.ndarray) -> float:
+        _, max_pixel_value = _utilities.get_dtype_range(image.dtype)
+        image = image.astype(intermediate_type, copy=False)
+        reference = reference.astype(intermediate_type, copy=False)
+        padded_image = EdgePad(2).apply(image)
+        x_image = kernels.convolve(padded_image, kernels.VERTICAL_SOBEL_3x3)
+        y_image = kernels.convolve(padded_image, kernels.HORIZONTAL_SOBEL_3x3)
+        gradient_map = np.sqrt(x_image ** 2 + y_image ** 2)
+        image_windows = self._sliding_window.slide(image)
+        gradient_windows = self._sliding_window.slide(gradient_map)
+        reference_windows = self._sliding_window.slide(reference)
+        windows_results = []
+        for window, gradient_window, reference_window in zip(
+                image_windows,
+                gradient_windows,
+                reference_windows):
+            windows_results.append(self._calculate_on_window(window,
+                                                             gradient_window,
+                                                             reference_window,
+                                                             max_pixel_value))
+        return np.mean(windows_results)
+
+    def _calculate_on_window(self, image: np.ndarray,
+                             gradient_map: np.ndarray,
+                             reference: np.ndarray,
+                             max_pixel_value: Real) -> float:
+        x_avg = image.mean()
+        y_avg = reference.mean()
+        gradient_map_avg = gradient_map.mean()
+        gradient_map_var = np.sum((gradient_map - gradient_map_avg) ** 2) / (
+                gradient_map.size - 1)
+        y_var = np.sum((reference - y_avg) ** 2) / (reference.size - 1)
+        gradient_map_var_square_root = np.sqrt(gradient_map_var)
+        y_var_square_root = np.sqrt(y_var)
+        gradient_map_y_cov = (np.sum(gradient_map - gradient_map_avg) * np.sum(
+            reference - y_avg)
+                              / (gradient_map.size - 1))
+        c1 = (self._k1 * float(max_pixel_value)) ** 2
+        c2 = (self._k2 * float(max_pixel_value)) ** 2
+        c3 = c2 / 2
+        luminance = (2 * x_avg * y_avg + c1) / (x_avg ** 2 + y_avg ** 2 + c1)
+        contrast = (2 * gradient_map_var_square_root * y_var_square_root +
+                    c2) / (gradient_map_var + y_var + c2)
+        structure = (gradient_map_y_cov + c3) / (
+                gradient_map_var_square_root * y_var_square_root + c3)
         return luminance ** self._alpha * contrast ** self._beta * (
                 structure ** self._gamma)
