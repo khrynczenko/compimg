@@ -91,7 +91,8 @@ class PSNR(SimilarityMetric):
         mse = MSE().compare(image, reference)
         if mse == 0.0:
             return float("inf")
-        _, max_pixel_value = _utilities.get_dtype_range(image_original_dtype)
+        _, max_pixel_value = _utilities._get_image_dtype_range(
+            image_original_dtype)
         psnr = 20 * np.log10(max_pixel_value) - 10 * np.log10(mse)
         return psnr
 
@@ -119,7 +120,7 @@ class SSIM(SimilarityMetric):
     @_decorators._raise_when_arrays_have_different_dtypes
     @_decorators._raise_when_arrays_have_different_shapes
     def compare(self, image: np.ndarray, reference: np.ndarray) -> float:
-        _, max_pixel_value = _utilities.get_dtype_range(image.dtype)
+        _, max_pixel_value = _utilities._get_image_dtype_range(image.dtype)
         image = image.astype(intermediate_type, copy=False)
         reference = reference.astype(intermediate_type, copy=False)
         image_windows = self._sliding_window.slide(image)
@@ -177,7 +178,7 @@ class GSSIM(SimilarityMetric):
     @_decorators._raise_when_arrays_have_different_dtypes
     @_decorators._raise_when_arrays_have_different_shapes
     def compare(self, image: np.ndarray, reference: np.ndarray) -> float:
-        _, max_pixel_value = _utilities.get_dtype_range(image.dtype)
+        _, max_pixel_value = _utilities._get_image_dtype_range(image.dtype)
         image = image.astype(intermediate_type, copy=False)
         reference = reference.astype(intermediate_type, copy=False)
         padded_image = EdgePad(2).apply(image)

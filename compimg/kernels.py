@@ -35,14 +35,14 @@ def convolve(image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
     if kernel.shape[:2] > image.shape[:2]:
         raise KernelBiggerThanImageError(kernel.shape, image.shape)
     original_dtype = image.dtype
-    image = image.astype(np.float64)
-    kernel = kernel.astype(np.float64)
+    image = image.astype(np.float64, copy=False)
+    kernel = kernel.astype(np.float64, copy=False)
     axis = None
     if image.ndim == 3 and kernel.ndim == 2:  # Multichannel image
         kernel = _replicate(kernel, image.shape[2])
         axis = (0, 1)
     slider = IdentitySlidingWindow(kernel.shape[:2], (1, 1))
-    min, max = _utilities.get_dtype_range(original_dtype)
+    min, max = _utilities._get_image_dtype_range(original_dtype)
     pixels = np.array(
         [np.sum(slide * kernel, axis=axis).clip(min, max).astype(
             original_dtype)
