@@ -3,13 +3,12 @@ import itertools
 import numpy as np
 
 from typing import Tuple
-from compimg.exceptions import KernelBiggerThanImageError
+from compimg.exceptions import KernelBiggerThanImageError, KernelShapeNotOddError
 from compimg.windows import IdentitySlidingWindow
 from compimg._internals import _utilities
 
 BOX_BLUR_3X3: np.ndarray = np.full((3, 3), 1.0 / 9.0, dtype=np.float64)
-BOX_BLUR_4X4: np.ndarray = np.full((4, 4), 1.0 / 16.0, dtype=np.float64)
-BOX_BLUR_5X5: np.ndarray = np.full((4, 4), 1.0 / 25.0, dtype=np.float64)
+BOX_BLUR_5X5: np.ndarray = np.full((5, 5), 1.0 / 25.0, dtype=np.float64)
 GAUSSIAN_BLUR_3x3: np.ndarray = (1.0 / 16.0) * np.array(
     [[1, 2, 1], [2, 4, 2], [1, 2, 1]], dtype=np.float64)
 VERTICAL_SOBEL_3x3: np.ndarray = np.array(
@@ -30,10 +29,13 @@ def convolve(image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
     :param kernel: Kernel to be used.
     :return: Convolved image.
     :raises KernelBiggerThanImageError: When kernel does not fit into image.
+    :raises KernelShapeNotOddError: When kernel does not is of even shape.
 
     """
     if kernel.shape[:2] > image.shape[:2]:
         raise KernelBiggerThanImageError(kernel.shape, image.shape)
+    if kernel.shape[0] % 2 == 0 or kernel.shape[1] % 2 == 0:
+        raise KernelShapeNotOddError(kernel.shape)
     original_dtype = image.dtype
     image = image.astype(np.float64, copy=False)
     kernel = kernel.astype(np.float64, copy=False)
@@ -54,9 +56,37 @@ def convolve(image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
     return pixels.reshape(new_shape)
 
 
+def _convolve_without_clipping_changing_dtype(image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
+    """
+    Performs the convolution using provided kernel. Does not clip values change dtype or other things.
+
+    :param image: Image on which to perform a convolution.
+    :param kernel: Kernel to be used.
+    :return: Convolved image.
+    :raises KernelBiggerThanImageError: When kernel does not fit into image.
+    """
+    if kernel.shape[:2] > image.shape[:2]:
+        raise KernelBiggerThanImageError(kernel.shape, image.shape)
+    if kernel.shape[0] % 2 == 0 or kernel.shape[1] % 2 == 0:
+        raise KernelShapeNotOddError(kernel.shape)
+    axis = None
+    if image.ndim == 3 and kernel.ndim == 2:  # Multichannel image
+        kernel = _replicate(kernel, image.shape[2])
+        axis = (0, 1)
+    slider = IdentitySlidingWindow(kernel.shape[:2], (1, 1))
+    pixels = np.array(
+        [np.sum(slide * kernel, axis=axis)
+         for slide in
+         slider.slide(image)])
+    new_shape = list(image.shape)
+    new_shape[0] = image.shape[0] - kernel.shape[0] + 1
+    new_shape[1] = image.shape[1] - kernel.shape[1] + 1
+    return pixels.reshape(new_shape)
+
+
 def make_guassian_kernel(shape: Tuple[int, int], sigma: float):
     """
-    Produces Two-dimensional Gaussian function according to
+    Produces two-dimensional Gaussian kernel according to
     https://en.wikipedia.org/wiki/Gaussian_function.
 
     :param shape: Shape of the kernel.

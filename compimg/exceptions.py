@@ -28,3 +28,10 @@ class KernelBiggerThanImageError(Exception):
         super().__init__(
             f"\nKernel used in convolution must be bigger that image itself."
             f"Kernel shape = {kernel_shape}, Image shape = {image_shape}")
+
+
+class KernelShapeNotOddError(Exception):
+    def __init__(self, kernel_shape: Sequence[int]):
+        super().__init__(
+            f"\nKernel used in convolution must be of odd shape. "
+            f"Kernel shape = {kernel_shape}, rows and columns must be odd.")
