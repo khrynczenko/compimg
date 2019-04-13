@@ -31,15 +31,21 @@ float16.
 >>> import numpy as np
 >>> import compimg
 >>> import compimg.similarity
->>> compimg.intermediate_type = np.float32
+>>> compimg.config.intermediate_type = np.dtype(np.float32)
 >>> # code that uses similarity metrics
 
 
 """
 import numpy as np
 
-# This is type that is used for all the calculations (images are
-# converted into it if necessary, for example when overflow or underflow
-# would occur due to calculations).
-# Change only if you know what you are doing.
-intermediate_type: np.dtype = np.float64
+
+class Config:
+    def __init__(self):
+        # This is type that is used for all the calculations (images are
+        # converted into it if necessary, for example when overflow or
+        # underflow would occur due to calculations).
+        # Change only if you know what you are doing.
+        self.intermediate_dtype: np.dtype = np.dtype(np.float64)
+
+
+config = Config()
