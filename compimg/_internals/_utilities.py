@@ -14,7 +14,7 @@ _TYPES_AND_RANGES: Dict[str, Tuple[Real, Real]] = {
 }
 
 
-def get_dtype_range(dtype: np.dtype) -> typing.Tuple[Real, Real]:
+def _get_image_dtype_range(dtype: np.dtype) -> typing.Tuple[Real, Real]:
     """This also assumes that image are considered where by convention
         for floats values are stored within range 0.0 to 1.0."""
     dtype_range = _TYPES_AND_RANGES.get(dtype.name, None)

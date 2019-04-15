@@ -4,10 +4,11 @@ import numpy as np
 
 from collections import OrderedDict
 from inspect import BoundArguments
-from compimg.exceptions import DifferentShapesError, DifferentDTypesError
+from compimg.exceptions import (DifferentShapesError, DifferentDTypesError,
+                                NegativePadAmountError)
 
 
-def raise_when_arrays_have_different_shapes(func):
+def _raise_when_arrays_have_different_shapes(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         signature = inspect.signature(func)
@@ -22,7 +23,7 @@ def raise_when_arrays_have_different_shapes(func):
     return wrapper
 
 
-def raise_when_arrays_have_different_dtypes(func):
+def _raise_when_arrays_have_different_dtypes(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         signature = inspect.signature(func)
@@ -32,6 +33,20 @@ def raise_when_arrays_have_different_dtypes(func):
         reference: np.ndarray = all_args.get("reference")
         if image.dtype != reference.dtype:
             raise DifferentDTypesError(image.dtype, reference.dtype)
+        return func(*bound_arguments.args, **bound_arguments.kwargs)
+
+    return wrapper
+
+
+def _raise_if_pad_amount_is_negative(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        signature = inspect.signature(func)
+        bound_arguments: BoundArguments = signature.bind(*args, **kwargs)
+        all_args: OrderedDict = bound_arguments.arguments
+        amount: np.ndarray = all_args.get("amount")
+        if amount < 0:
+            raise NegativePadAmountError(amount)
         return func(*bound_arguments.args, **bound_arguments.kwargs)
 
     return wrapper
