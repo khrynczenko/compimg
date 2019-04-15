@@ -5,9 +5,6 @@ How to use
 ----------
 
 .. automodule:: compimg
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 Submodules
 ----------
