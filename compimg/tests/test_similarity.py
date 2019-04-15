@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from compimg.similarity import MSE, RMSE, MAE, PSNR, SSIM
+from compimg.similarity import MSE, RMSE, MAE, PSNR, SSIM, GSSIM
 from compimg.exceptions import DifferentDTypesError, DifferentShapesError
 
 
@@ -21,7 +21,7 @@ def image():
     ], dtype=np.uint8)
 
 
-@pytest.mark.parametrize("metric", [MSE(), MAE(), PSNR(), SSIM()])
+@pytest.mark.parametrize("metric", [MSE(), MAE(), PSNR(), SSIM(), GSSIM()])
 def test_if_different_shapes_guard_raises(metric):
     wrong_shape_x = np.zeros((10, 10, 2))
     wrong_shape_y = np.zeros((20, 20, 2))
@@ -29,7 +29,7 @@ def test_if_different_shapes_guard_raises(metric):
         metric.compare(wrong_shape_x, wrong_shape_y)
 
 
-@pytest.mark.parametrize("metric", [MSE(), MAE(), PSNR(), SSIM()])
+@pytest.mark.parametrize("metric", [MSE(), MAE(), PSNR(), SSIM(), GSSIM()])
 def test_if_different_dtypes_guard_raises(metric):
     wrong_dtype_x = np.zeros((10, 10, 2), dtype=np.float32)
     wrong_dtype_y = np.zeros((10, 10, 2), dtype=np.uint8)
@@ -80,12 +80,25 @@ class TestPSNR:
 
 class TestSSIM:
     def test_compare_returns_one_when_images_are_identical(self):
-        reference_image = np.ones((10, 10, 3))
+        reference_image = np.ones((20, 20, 3))
         value = SSIM().compare(reference_image, reference_image)
         assert value == 1.0
 
     def test_compare_returns_zero_when_images_are_completely_different(self):
-        image = np.full((10, 10, 3), fill_value=255, dtype=np.uint8)
-        reference_image = np.zeros((10, 10, 3), dtype=np.uint8)
+        image = np.full((20, 20, 3), fill_value=255, dtype=np.uint8)
+        reference_image = np.zeros((20, 20, 3), dtype=np.uint8)
         value = SSIM().compare(image, reference_image)
+        assert round(value, 2) == 0.00
+
+
+class TestGSSIM:
+    def test_compare_returns_one_when_images_are_identical(self):
+        reference_image = np.ones((20, 20, 3))
+        value = GSSIM().compare(reference_image, reference_image)
+        assert value == 1.0
+
+    def test_compare_returns_zero_when_images_are_completely_different(self):
+        image = np.full((20, 20, 3), fill_value=255, dtype=np.uint8)
+        reference_image = np.zeros((20, 20, 3), dtype=np.uint8)
+        value = GSSIM().compare(image, reference_image)
         assert round(value, 2) == 0.00

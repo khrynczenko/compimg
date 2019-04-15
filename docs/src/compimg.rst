@@ -1,13 +1,10 @@
 compimg package
 ===============
 
-Usage
------
+How to use
+----------
 
 .. automodule:: compimg
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 Submodules
 ----------
@@ -29,9 +26,25 @@ compimg.similarity module
     :show-inheritance:
 
 compimg.windows module
--------------------------
+----------------------
 
 .. automodule:: compimg.windows
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compimg.pads module
+----------------------
+
+.. automodule:: compimg.pads
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compimg.kernels module
+----------------------
+
+.. automodule:: compimg.kernels
     :members:
     :undoc-members:
     :show-inheritance:
