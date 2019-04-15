@@ -1,8 +1,8 @@
 compimg package
 ===============
 
-Usage
------
+How to use
+----------
 
 .. automodule:: compimg
     :members:
