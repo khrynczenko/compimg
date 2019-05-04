@@ -137,10 +137,9 @@ class SSIM(SimilarityMetric):
     def compare(self, image: np.ndarray, reference: np.ndarray) -> float:
         # This implementations is based on
         # https://docs.opencv.org/2.4/doc/tutorials/highgui/video-input-psnr-ssim/video-input-psnr-ssim.html
-        convolve = kernels._unobtrusive_convolve
         _, max_pixel_value = _utilities._get_image_dtype_range(image.dtype)
-        C1 = (self._k1 * max_pixel_value) ** 2
-        C2 = (self._k2 * max_pixel_value) ** 2
+        C1 = (self._k1 * max_pixel_value) ** 2.0
+        C2 = (self._k2 * max_pixel_value) ** 2.0
         image = image.astype(compimg.config.intermediate_dtype)
         reference = reference.astype(compimg.config.intermediate_dtype)
         x = image
@@ -148,15 +147,17 @@ class SSIM(SimilarityMetric):
         y_squared = reference * reference
         x_squared = image * image
         x_times_y = image * reference
-        x_mean = convolve(x, _SSIM_GAUSSIAN_KERNEL_11X11)
-        y_mean = convolve(y, _SSIM_GAUSSIAN_KERNEL_11X11)
+        x_mean = kernels.convolve(x, _SSIM_GAUSSIAN_KERNEL_11X11)
+        y_mean = kernels.convolve(y, _SSIM_GAUSSIAN_KERNEL_11X11)
         x_mean_squared = x_mean * x_mean
         y_mean_squared = y_mean * y_mean
-        sigma_x_squared = convolve(x_squared, _SSIM_GAUSSIAN_KERNEL_11X11)
+        sigma_x_squared = kernels.convolve(x_squared,
+                                           _SSIM_GAUSSIAN_KERNEL_11X11)
         sigma_x_squared -= x_mean_squared
-        sigma_y_squared = convolve(y_squared, _SSIM_GAUSSIAN_KERNEL_11X11)
+        sigma_y_squared = kernels.convolve(y_squared,
+                                           _SSIM_GAUSSIAN_KERNEL_11X11)
         sigma_y_squared -= y_mean_squared
-        sigma_x_y = convolve(x_times_y, _SSIM_GAUSSIAN_KERNEL_11X11)
+        sigma_x_y = kernels.convolve(x_times_y, _SSIM_GAUSSIAN_KERNEL_11X11)
         sigma_x_y -= x_mean * y_mean
 
         t1 = 2 * x_mean * y_mean + C1
@@ -185,17 +186,16 @@ class GSSIM(SimilarityMetric):
     @_decorators._raise_when_arrays_have_different_dtypes
     @_decorators._raise_when_arrays_have_different_shapes
     def compare(self, image: np.ndarray, reference: np.ndarray) -> float:
-        convolve = kernels._unobtrusive_convolve
         _, max_pixel_value = _utilities._get_image_dtype_range(image.dtype)
-        C1 = (self._k1 * max_pixel_value) ** 2
-        C2 = (self._k2 * max_pixel_value) ** 2
+        C1 = (self._k1 * max_pixel_value) ** 2.0
+        C2 = (self._k2 * max_pixel_value) ** 2.0
         C3 = C2 / 2.0
         image = image.astype(compimg.config.intermediate_dtype)
         reference = reference.astype(compimg.config.intermediate_dtype)
         x = image
-        y = reference
-        x_mean = convolve(x, _SSIM_GAUSSIAN_KERNEL_11X11)
-        y_mean = convolve(y, _SSIM_GAUSSIAN_KERNEL_11X11)
+        y = image
+        x_mean = kernels.convolve(x, _SSIM_GAUSSIAN_KERNEL_11X11)
+        y_mean = kernels.convolve(y, _SSIM_GAUSSIAN_KERNEL_11X11)
         x_mean_squared = x_mean * x_mean
         y_mean_squared = y_mean * y_mean
 
@@ -205,16 +205,19 @@ class GSSIM(SimilarityMetric):
         sx_squared = sobel_image * sobel_image
         sy_squared = sobel_reference * sobel_reference
         sxy = sobel_reference * sobel_image
-        sx_mean = convolve(sobel_image, _SSIM_GAUSSIAN_KERNEL_11X11)
-        sy_mean = convolve(sobel_reference, _SSIM_GAUSSIAN_KERNEL_11X11)
+        sx_mean = kernels.convolve(sobel_image, _SSIM_GAUSSIAN_KERNEL_11X11)
+        sy_mean = kernels.convolve(sobel_reference,
+                                   _SSIM_GAUSSIAN_KERNEL_11X11)
         sx_mean_squared = sx_mean * sx_mean
         sy_mean_squared = sy_mean * sy_mean
 
-        sigma_sx_squared = convolve(sx_squared, _SSIM_GAUSSIAN_KERNEL_11X11)
+        sigma_sx_squared = kernels.convolve(sx_squared,
+                                            _SSIM_GAUSSIAN_KERNEL_11X11)
         sigma_sx_squared -= sx_mean_squared
-        sigma_sy_squared = convolve(sy_squared, _SSIM_GAUSSIAN_KERNEL_11X11)
+        sigma_sy_squared = kernels.convolve(sy_squared,
+                                            _SSIM_GAUSSIAN_KERNEL_11X11)
         sigma_sy_squared -= sy_mean_squared
-        sigma_sxy = convolve(sxy, _SSIM_GAUSSIAN_KERNEL_11X11)
+        sigma_sxy = kernels.convolve(sxy, _SSIM_GAUSSIAN_KERNEL_11X11)
         sigma_sxy -= sx_mean * sy_mean
         luminance = (2 * x_mean * y_mean + C1) / (
                 x_mean_squared + y_mean_squared + C1)
@@ -226,8 +229,7 @@ class GSSIM(SimilarityMetric):
         return np.mean(luminance * contrast * structure)
 
     def _apply_sobel(self, array: np.ndarray) -> np.ndarray:
-        convolve = kernels._unobtrusive_convolve
         array = EdgePad(1).apply(array)
-        array1 = convolve(array, kernels.HORIZONTAL_SOBEL_3x3)
-        array2 = convolve(array, kernels.VERTICAL_SOBEL_3x3)
+        array1 = kernels.convolve(array, kernels.HORIZONTAL_SOBEL_3x3)
+        array2 = kernels.convolve(array, kernels.VERTICAL_SOBEL_3x3)
         return array1 + array2
