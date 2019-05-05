@@ -2,7 +2,8 @@ import numpy as np
 import pytest
 
 from compimg.exceptions import (KernelBiggerThanImageError,
-                                KernelShapeNotOddError)
+                                KernelShapeNotOddError,
+                                KernelNot2DArray)
 from compimg import kernels
 
 
@@ -37,4 +38,11 @@ def test_convolve_raises_when_kernel_is_not_odd_shape():
     image = np.zeros((10, 10))
     kernel = np.array(np.ones((4, 4)))
     with pytest.raises(KernelShapeNotOddError):
+        kernels.convolve(image, kernel)
+
+
+def test_convolve_raises_when_kernel_is_not_2d_array():
+    image = np.zeros((10, 10))
+    kernel = np.array(np.ones((4, 4, 3)))
+    with pytest.raises(KernelNot2DArray):
         kernels.convolve(image, kernel)

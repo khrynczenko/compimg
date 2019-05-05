@@ -1,4 +1,7 @@
-"""Module with routines for computing similarity between images"""
+"""
+Module with routines for computing similarity between images.
+
+"""
 import abc
 import numpy as np
 import compimg
