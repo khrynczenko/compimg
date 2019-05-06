@@ -35,3 +35,8 @@ class KernelShapeNotOddError(Exception):
         super().__init__(
             f"\nKernel used in convolution must be of odd shape. "
             f"Kernel shape = {kernel_shape}, rows and columns must be odd.")
+
+
+class KernelNot2DArray(Exception):
+    def __init__(self, dims: int):
+        super().__init__(f"\nKernel must be 2D numpy array, not {dims}D.")

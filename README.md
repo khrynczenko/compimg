@@ -18,7 +18,7 @@ evaluation of image restoration and reconstruction algorithms. They require two 
 - test image (image of interest)
 - reference image (image we compare against)  
 
-Such metrics produce numerical value.
+Such metrics produce numerical values.
  
 Such methods are are widely called full/reduced-reference methods for 
 assessing image quality.
@@ -38,10 +38,12 @@ assert result == 1.0
 
 ## Features  
 - common metrics for calculating similarity of one image to another 
-- only `numpy` as a dependency
+- images are treated as `numpy` arrays which makes `compimg` compatible 
+with most image processing packages
+- only `scipy` (and inherently `numpy`) as a dependency
 
 ## Installation
-`compimg` is available on PyPI. You can install it using pip:  
+`compimg` is available on *PyPI*. You can install it using pip:  
 `pip install compimg`
 
 ## Note 
