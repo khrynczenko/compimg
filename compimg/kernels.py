@@ -30,12 +30,17 @@ def convolve(image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
     Performs the convolution using provided kernel.
 
     .. attention::
+        Result :py:class:`numpy.ndarray` need to be processed properly before
+        it can be used as an image again. For example one could divide its
+        values by 255.0 and then cast its dtype to np.uint8.
+
+    .. attention::
         In case when image has multiple channels kernel is going to be used
         separately for each image channel.
 
     :param image: Image on which to perform a convolution.
     :param kernel: Kernel to be used.
-    :return: Convolved image.
+    :return: Convolved image (probably of different dtype).
     :raises KernelBiggerThanImageError: When kernel does not fit into image.
     :raises KernelShapeNotOddError: When kernel does not is of even shape.
     :raises KernelNot2DArray: When kernel is not a 2 dimensional array.
