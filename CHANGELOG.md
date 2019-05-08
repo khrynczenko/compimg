@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## compimg 0.2.1
+- Improved performance of SSIM and GSSIM.
+- Now using scipy to perform convolutions. Due to that now  `compimg` is 
+dependent on `scipy`.
+- Fixed issue where `_internals` package could not be found.
+
 ## compimg 0.2.0
 - Added `GSSIM` metric
 - Added `RMSE` metric
