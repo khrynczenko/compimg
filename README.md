@@ -18,9 +18,7 @@ evaluation of image restoration and reconstruction algorithms. They require two 
 - test image (image of interest)
 - reference image (image we compare against)  
 
-Such metrics produce numerical values.
- 
-Such methods are are widely called full/reduced-reference methods for 
+Such metrics produce numerical values and are widely called full/reduced-reference methods for 
 assessing image quality.
 
 `compimg` package is all about calculating similarity between images. 
