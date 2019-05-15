@@ -20,7 +20,6 @@ jobs:
             pip install --upgrade pip
             pip install --upgrade setuptools
             pip install -r "dev-requirements.txt"
-
       - run:
           name: install
           command: |
@@ -76,7 +75,6 @@ jobs:
             pip install --upgrade pip
             pip install --upgrade setuptools
             pip install -r "dev-requirements.txt"
-
       - run:
           name: install
           command: |
