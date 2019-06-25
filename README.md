@@ -46,8 +46,8 @@ with most image processing packages
 
 ## Note 
 Keep in mind that metrics are not aware of what kind of image you are passing. 
-If metric relies on intensity values and you have YCbCr image you should pass
-only the first channel to the computing routine.
+If metric relies on intensity values and you have YCbCr image you should probably 
+pass only the first channel to the computing subroutine.
 
 ## Help
 If you have any problems or questions please post an issue.
