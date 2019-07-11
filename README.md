@@ -31,7 +31,7 @@ from compimg.similarity import SSIM
 some_grayscale_image = np.ones((20,20), dtype=np.uint8)
 identical_image = np.ones((20,20), dtype=np.uint8)
 result = SSIM().compare(some_grayscale_image, identical_image)
-assert result == 1.0
+assert result == 1.0 # SSIM returns 1.0 when images are identical
 ```
 
 ## Features  
