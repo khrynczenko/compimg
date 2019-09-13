@@ -19,11 +19,7 @@ jobs:
             . venv/bin/activate
             pip install --upgrade pip
             pip install --upgrade setuptools
-            pip install "recommonmark>=0.5.0"
-            pip install wheel
-            pip install pytest
-            pip install flake8
-            pip install sphinx
+            pip install -r "dev-requirements.txt"
 
       - run:
           name: install
@@ -79,11 +75,7 @@ jobs:
             . venv/bin/activate
             pip install --upgrade pip
             pip install --upgrade setuptools
-            pip install "recommonmark>=0.5.0"
-            pip install wheel
-            pip install pytest
-            pip install flake8
-            pip install sphinx
+            pip install -r "dev-requirements.txt"
 
       - run:
           name: install

@@ -4,7 +4,8 @@
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/compimg.svg)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Documentation Status](https://readthedocs.org/projects/compimg/badge/?version=stable)](https://compimg.readthedocs.io/en/stable/?badge=stable)
-  
+![PyPI - Downloads](https://img.shields.io/pypi/dm/compimg)
+
 Branches:  
 master: [![CircleCI](https://circleci.com/gh/khrynczenko/compimg/tree/master.svg?style=svg)](https://circleci.com/gh/khrynczenko/compimg/tree/master)  
 develop: [![CircleCI](https://circleci.com/gh/khrynczenko/compimg/tree/develop.svg?style=svg)](https://circleci.com/gh/khrynczenko/compimg/tree/develop)
@@ -18,9 +19,7 @@ evaluation of image restoration and reconstruction algorithms. They require two 
 - test image (image of interest)
 - reference image (image we compare against)  
 
-Such metrics produce numerical values.
- 
-Such methods are are widely called full/reduced-reference methods for 
+Such metrics produce numerical values and are widely called full/reduced-reference methods for 
 assessing image quality.
 
 `compimg` package is all about calculating similarity between images. 
@@ -33,7 +32,7 @@ from compimg.similarity import SSIM
 some_grayscale_image = np.ones((20,20), dtype=np.uint8)
 identical_image = np.ones((20,20), dtype=np.uint8)
 result = SSIM().compare(some_grayscale_image, identical_image)
-assert result == 1.0
+assert result == 1.0 # SSIM returns 1.0 when images are identical
 ```
 
 ## Features  
@@ -48,8 +47,8 @@ with most image processing packages
 
 ## Note 
 Keep in mind that metrics are not aware of what kind of image you are passing. 
-If metric relies on intensity values and you have YCbCr image you should pass
-only the first channel to the computing routine.
+If metric relies on intensity values and you have YCbCr image you should probably 
+pass only the first channel to the computing subroutine.
 
 ## Help
 If you have any problems or questions please post an issue.

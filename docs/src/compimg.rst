@@ -22,6 +22,7 @@ compimg.similarity module
 
 .. automodule:: compimg.similarity
     :members:
+    :special-members:
     :undoc-members:
     :show-inheritance:
 
