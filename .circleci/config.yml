@@ -19,14 +19,7 @@ jobs:
             . venv/bin/activate
             pip install --upgrade pip
             pip install --upgrade setuptools
-<<<<<<< HEAD
-            pip install -r "docs/src/requirements.txt"
-            pip install wheel
-            pip install pytest
-            pip install flake8
-=======
             pip install -r "dev-requirements.txt"
->>>>>>> bc0682b500661696c8e25330974060cb856edca0
 
       - run:
           name: install
@@ -82,14 +75,7 @@ jobs:
             . venv/bin/activate
             pip install --upgrade pip
             pip install --upgrade setuptools
-<<<<<<< HEAD
-            pip install -r "docs/src/requirements.txt"
-            pip install wheel
-            pip install pytest
-            pip install flake8
-=======
             pip install -r "dev-requirements.txt"
->>>>>>> bc0682b500661696c8e25330974060cb856edca0
 
       - run:
           name: install
@@ -145,14 +131,7 @@ jobs:
             . venv/bin/activate
             pip install --upgrade pip
             pip install --upgrade setuptools
-<<<<<<< HEAD
-            pip install -r "docs/src/requirements.txt"
-            pip install wheel
-            pip install pytest
-            pip install flake8
-=======
             pip install -r "dev-requirements.txt"
->>>>>>> bc0682b500661696c8e25330974060cb856edca0
 
       - run:
           name: install
