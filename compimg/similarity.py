@@ -13,29 +13,153 @@ from compimg._internals import _decorators, _utilities
 # Kernel that is used in the SSIM implementation presented by the authors in
 # "Image Quality Assessment: From Error Visibility to Structural Similarity"
 # by Wang et al.
-_SSIM_GAUSSIAN_KERNEL_11X11 = np.array([
-    [1.0576e-06, 7.8144e-06, 3.7022e-05, 0.00011246, 0.00021905, 0.00027356,
-     0.00021905, 0.00011246, 3.7022e-05, 7.8144e-06, 1.0576e-06],
-    [7.8144e-06, 5.7741e-05, 0.00027356, 0.00083101, 0.0016186, 0.0020214,
-     0.0016186, 0.00083101, 0.00027356, 5.7741e-05, 7.8144e-06],
-    [3.7022e-05, 0.00027356, 0.0012961, 0.0039371, 0.0076684, 0.0095766,
-     0.0076684, 0.0039371, 0.0012961, 0.00027356, 3.7022e-05],
-    [0.00011246, 0.00083101, 0.0039371, 0.01196, 0.023294, 0.029091, 0.023294,
-     0.01196, 0.0039371, 0.00083101, 0.00011246],
-    [0.00021905, 0.0016186, 0.0076684, 0.023294, 0.045371, 0.056662, 0.045371,
-     0.023294, 0.0076684, 0.0016186, 0.00021905],
-    [0.00027356, 0.0020214, 0.0095766, 0.029091, 0.056662, 0.070762, 0.056662,
-     0.029091, 0.0095766, 0.0020214, 0.00027356],
-    [0.00021905, 0.0016186, 0.0076684, 0.023294, 0.045371, 0.056662, 0.045371,
-     0.023294, 0.0076684, 0.0016186, 0.00021905],
-    [0.00011246, 0.00083101, 0.0039371, 0.01196, 0.023294, 0.029091, 0.023294,
-     0.01196, 0.0039371, 0.00083101, 0.00011246],
-    [3.7022e-05, 0.00027356, 0.0012961, 0.0039371, 0.0076684, 0.0095766,
-     0.0076684, 0.0039371, 0.0012961, 0.00027356, 3.7022e-05],
-    [7.8144e-06, 5.7741e-05, 0.00027356, 0.00083101, 0.0016186, 0.0020214,
-     0.0016186, 0.00083101, 0.00027356, 5.7741e-05, 7.8144e-06],
-    [1.0576e-06, 7.8144e-06, 3.7022e-05, 0.00011246, 0.00021905, 0.00027356,
-     0.00021905, 0.00011246, 3.7022e-05, 7.8144e-06, 1.0576e-06]])
+_SSIM_GAUSSIAN_KERNEL_11X11 = np.array(
+    [
+        [
+            1.0576e-06,
+            7.8144e-06,
+            3.7022e-05,
+            0.00011246,
+            0.00021905,
+            0.00027356,
+            0.00021905,
+            0.00011246,
+            3.7022e-05,
+            7.8144e-06,
+            1.0576e-06,
+        ],
+        [
+            7.8144e-06,
+            5.7741e-05,
+            0.00027356,
+            0.00083101,
+            0.0016186,
+            0.0020214,
+            0.0016186,
+            0.00083101,
+            0.00027356,
+            5.7741e-05,
+            7.8144e-06,
+        ],
+        [
+            3.7022e-05,
+            0.00027356,
+            0.0012961,
+            0.0039371,
+            0.0076684,
+            0.0095766,
+            0.0076684,
+            0.0039371,
+            0.0012961,
+            0.00027356,
+            3.7022e-05,
+        ],
+        [
+            0.00011246,
+            0.00083101,
+            0.0039371,
+            0.01196,
+            0.023294,
+            0.029091,
+            0.023294,
+            0.01196,
+            0.0039371,
+            0.00083101,
+            0.00011246,
+        ],
+        [
+            0.00021905,
+            0.0016186,
+            0.0076684,
+            0.023294,
+            0.045371,
+            0.056662,
+            0.045371,
+            0.023294,
+            0.0076684,
+            0.0016186,
+            0.00021905,
+        ],
+        [
+            0.00027356,
+            0.0020214,
+            0.0095766,
+            0.029091,
+            0.056662,
+            0.070762,
+            0.056662,
+            0.029091,
+            0.0095766,
+            0.0020214,
+            0.00027356,
+        ],
+        [
+            0.00021905,
+            0.0016186,
+            0.0076684,
+            0.023294,
+            0.045371,
+            0.056662,
+            0.045371,
+            0.023294,
+            0.0076684,
+            0.0016186,
+            0.00021905,
+        ],
+        [
+            0.00011246,
+            0.00083101,
+            0.0039371,
+            0.01196,
+            0.023294,
+            0.029091,
+            0.023294,
+            0.01196,
+            0.0039371,
+            0.00083101,
+            0.00011246,
+        ],
+        [
+            3.7022e-05,
+            0.00027356,
+            0.0012961,
+            0.0039371,
+            0.0076684,
+            0.0095766,
+            0.0076684,
+            0.0039371,
+            0.0012961,
+            0.00027356,
+            3.7022e-05,
+        ],
+        [
+            7.8144e-06,
+            5.7741e-05,
+            0.00027356,
+            0.00083101,
+            0.0016186,
+            0.0020214,
+            0.0016186,
+            0.00083101,
+            0.00027356,
+            5.7741e-05,
+            7.8144e-06,
+        ],
+        [
+            1.0576e-06,
+            7.8144e-06,
+            3.7022e-05,
+            0.00011246,
+            0.00021905,
+            0.00027356,
+            0.00021905,
+            0.00011246,
+            3.7022e-05,
+            7.8144e-06,
+            1.0576e-06,
+        ],
+    ]
+)
 
 
 class SimilarityMetric(abc.ABC):
@@ -65,8 +189,9 @@ class MSE(SimilarityMetric):
     @_decorators._raise_when_arrays_have_different_shapes
     def compare(self, image: np.ndarray, reference: np.ndarray) -> float:
         image = image.astype(compimg.config.intermediate_dtype, copy=False)
-        reference = reference.astype(compimg.config.intermediate_dtype,
-                                     copy=False)
+        reference = reference.astype(
+            compimg.config.intermediate_dtype, copy=False
+        )
         return np.mean(((reference - image) ** 2))
 
 
@@ -80,8 +205,9 @@ class RMSE(SimilarityMetric):
     @_decorators._raise_when_arrays_have_different_shapes
     def compare(self, image: np.ndarray, reference: np.ndarray) -> float:
         image = image.astype(compimg.config.intermediate_dtype, copy=False)
-        reference = reference.astype(compimg.config.intermediate_dtype,
-                                     copy=False)
+        reference = reference.astype(
+            compimg.config.intermediate_dtype, copy=False
+        )
         return np.sqrt(MSE().compare(image, reference))
 
 
@@ -95,8 +221,9 @@ class MAE(SimilarityMetric):
     @_decorators._raise_when_arrays_have_different_shapes
     def compare(self, image: np.ndarray, reference: np.ndarray) -> float:
         image = image.astype(compimg.config.intermediate_dtype, copy=False)
-        reference = reference.astype(compimg.config.intermediate_dtype,
-                                     copy=False)
+        reference = reference.astype(
+            compimg.config.intermediate_dtype, copy=False
+        )
         return np.mean(np.abs(reference - image))
 
 
@@ -112,13 +239,15 @@ class PSNR(SimilarityMetric):
     def compare(self, image: np.ndarray, reference: np.ndarray) -> float:
         image_original_dtype = image.dtype
         image = image.astype(compimg.config.intermediate_dtype, copy=False)
-        reference = reference.astype(compimg.config.intermediate_dtype,
-                                     copy=False)
+        reference = reference.astype(
+            compimg.config.intermediate_dtype, copy=False
+        )
         mse = MSE().compare(image, reference)
         if mse == 0.0:
             return float("inf")
         _, max_pixel_value = _utilities._get_image_dtype_range(
-            image_original_dtype)
+            image_original_dtype
+        )
         psnr = 20 * np.log10(max_pixel_value) - 10 * np.log10(mse)
         return psnr
 
@@ -154,11 +283,13 @@ class SSIM(SimilarityMetric):
         y_mean = kernels.convolve(y, _SSIM_GAUSSIAN_KERNEL_11X11)
         x_mean_squared = x_mean * x_mean
         y_mean_squared = y_mean * y_mean
-        sigma_x_squared = kernels.convolve(x_squared,
-                                           _SSIM_GAUSSIAN_KERNEL_11X11)
+        sigma_x_squared = kernels.convolve(
+            x_squared, _SSIM_GAUSSIAN_KERNEL_11X11
+        )
         sigma_x_squared -= x_mean_squared
-        sigma_y_squared = kernels.convolve(y_squared,
-                                           _SSIM_GAUSSIAN_KERNEL_11X11)
+        sigma_y_squared = kernels.convolve(
+            y_squared, _SSIM_GAUSSIAN_KERNEL_11X11
+        )
         sigma_y_squared -= y_mean_squared
         sigma_x_y = kernels.convolve(x_times_y, _SSIM_GAUSSIAN_KERNEL_11X11)
         sigma_x_y -= x_mean * y_mean
@@ -209,26 +340,29 @@ class GSSIM(SimilarityMetric):
         sy_squared = sobel_reference * sobel_reference
         sxy = sobel_reference * sobel_image
         sx_mean = kernels.convolve(sobel_image, _SSIM_GAUSSIAN_KERNEL_11X11)
-        sy_mean = kernels.convolve(sobel_reference,
-                                   _SSIM_GAUSSIAN_KERNEL_11X11)
+        sy_mean = kernels.convolve(sobel_reference, _SSIM_GAUSSIAN_KERNEL_11X11)
         sx_mean_squared = sx_mean * sx_mean
         sy_mean_squared = sy_mean * sy_mean
 
-        sigma_sx_squared = kernels.convolve(sx_squared,
-                                            _SSIM_GAUSSIAN_KERNEL_11X11)
+        sigma_sx_squared = kernels.convolve(
+            sx_squared, _SSIM_GAUSSIAN_KERNEL_11X11
+        )
         sigma_sx_squared -= sx_mean_squared
-        sigma_sy_squared = kernels.convolve(sy_squared,
-                                            _SSIM_GAUSSIAN_KERNEL_11X11)
+        sigma_sy_squared = kernels.convolve(
+            sy_squared, _SSIM_GAUSSIAN_KERNEL_11X11
+        )
         sigma_sy_squared -= sy_mean_squared
         sigma_sxy = kernels.convolve(sxy, _SSIM_GAUSSIAN_KERNEL_11X11)
         sigma_sxy -= sx_mean * sy_mean
         luminance = (2 * x_mean * y_mean + C1) / (
-                x_mean_squared + y_mean_squared + C1)
-        contrast = (2 * np.sqrt(sigma_sx_squared) * np.sqrt(
-            sigma_sy_squared) + C2) / (
-                           sigma_sx_squared + sigma_sy_squared + C2)
+            x_mean_squared + y_mean_squared + C1
+        )
+        contrast = (
+            2 * np.sqrt(sigma_sx_squared) * np.sqrt(sigma_sy_squared) + C2
+        ) / (sigma_sx_squared + sigma_sy_squared + C2)
         structure = (sigma_sxy + C3) / (
-                np.sqrt(sigma_sx_squared) * np.sqrt(sigma_sy_squared) + C3)
+            np.sqrt(sigma_sx_squared) * np.sqrt(sigma_sy_squared) + C3
+        )
         return np.mean(luminance * contrast * structure)
 
     def _apply_sobel(self, array: np.ndarray) -> np.ndarray:
