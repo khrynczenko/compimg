@@ -60,6 +60,13 @@ jobs:
             . venv/bin/activate
             flake8 compimg
 
+      - run:
+          name: run black
+          command: |
+            . venv/bin/activate
+            black --check compimg
+            black --check benchmarks
+
   build-python37:
     docker:
       - image: circleci/python:3.7
@@ -116,6 +123,13 @@ jobs:
             . venv/bin/activate
             flake8 compimg
 
+      - run:
+          name: run black
+          command: |
+            . venv/bin/activate
+            black --check compimg
+            black --check benchmarks
+
   build-python38:
     docker:
       - image: circleci/python:3.8
@@ -171,6 +185,13 @@ jobs:
           command: |
             . venv/bin/activate
             flake8 compimg
+
+      - run:
+          name: run black
+          command: |
+            . venv/bin/activate
+            black --check compimg
+            black --check benchmarks
 
 workflows:
   version: 2
