@@ -7,18 +7,12 @@ from compimg.exceptions import DifferentDTypesError, DifferentShapesError
 
 @pytest.fixture
 def reference_image():
-    return np.array([
-        [1, 2, 3],
-        [4, 5, 6]
-    ], dtype=np.uint8)
+    return np.array([[1, 2, 3], [4, 5, 6]], dtype=np.uint8)
 
 
 @pytest.fixture
 def image():
-    return np.array([
-        [3, 2, 1],
-        [4, 5, 6]
-    ], dtype=np.uint8)
+    return np.array([[3, 2, 1], [4, 5, 6]], dtype=np.uint8)
 
 
 @pytest.mark.parametrize("metric", [MSE(), MAE(), PSNR(), SSIM(), GSSIM()])
@@ -72,8 +66,7 @@ class TestPSNR:
         value = PSNR().compare(image, reference_image)
         assert round(value, 2) == 46.88
 
-    def test_compare_returns_inf_if_images_are_identical(self,
-                                                         reference_image):
+    def test_compare_returns_inf_if_images_are_identical(self, reference_image):
         value = PSNR().compare(reference_image, reference_image)
         assert round(value, 2) == float("inf")
 

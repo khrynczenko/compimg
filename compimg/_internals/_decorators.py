@@ -4,8 +4,11 @@ import numpy as np
 
 from collections import OrderedDict
 from inspect import BoundArguments
-from compimg.exceptions import (DifferentShapesError, DifferentDTypesError,
-                                NegativePadAmountError)
+from compimg.exceptions import (
+    DifferentShapesError,
+    DifferentDTypesError,
+    NegativePadAmountError,
+)
 
 
 def _raise_when_arrays_have_different_shapes(func):

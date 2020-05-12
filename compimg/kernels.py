@@ -7,22 +7,29 @@ import numpy as np
 import compimg
 
 from scipy import ndimage
-from compimg.exceptions import (KernelBiggerThanImageError,
-                                KernelShapeNotOddError,
-                                KernelNot2DArray)
+from compimg.exceptions import (
+    KernelBiggerThanImageError,
+    KernelShapeNotOddError,
+    KernelNot2DArray,
+)
 
-BOX_BLUR_3X3: np.ndarray = np.full((3, 3), 1.0 / 9.0,
-                                   dtype=compimg.config.intermediate_dtype)
-BOX_BLUR_5X5: np.ndarray = np.full((5, 5), 1.0 / 25.0,
-                                   dtype=compimg.config.intermediate_dtype)
+BOX_BLUR_3X3: np.ndarray = np.full(
+    (3, 3), 1.0 / 9.0, dtype=compimg.config.intermediate_dtype
+)
+BOX_BLUR_5X5: np.ndarray = np.full(
+    (5, 5), 1.0 / 25.0, dtype=compimg.config.intermediate_dtype
+)
 GAUSSIAN_BLUR_3x3: np.ndarray = (1.0 / 16.0) * np.array(
-    [[1, 2, 1], [2, 4, 2], [1, 2, 1]], dtype=compimg.config.intermediate_dtype)
+    [[1, 2, 1], [2, 4, 2], [1, 2, 1]], dtype=compimg.config.intermediate_dtype
+)
 VERTICAL_SOBEL_3x3: np.ndarray = np.array(
     [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]],
-    dtype=compimg.config.intermediate_dtype)
+    dtype=compimg.config.intermediate_dtype,
+)
 HORIZONTAL_SOBEL_3x3: np.ndarray = np.array(
     [[-1, -2, -1], [0, 0, 0], [1, 2, 1]],
-    dtype=compimg.config.intermediate_dtype)
+    dtype=compimg.config.intermediate_dtype,
+)
 
 
 def convolve(image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
@@ -54,15 +61,18 @@ def convolve(image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
     output = np.zeros(image.shape, dtype=compimg.config.intermediate_dtype)
     if image.ndim > 2:
         for channel in range(image.shape[2]):
-            output[:, :, channel] = (
-                ndimage.convolve(image[:, :, channel],
-                                 kernel,
-                                 output=compimg.config.intermediate_dtype))
+            output[:, :, channel] = ndimage.convolve(
+                image[:, :, channel],
+                kernel,
+                output=compimg.config.intermediate_dtype,
+            )
     else:
-        output = ndimage.convolve(image,
-                                  kernel,
-                                  output=compimg.config.intermediate_dtype)
+        output = ndimage.convolve(
+            image, kernel, output=compimg.config.intermediate_dtype
+        )
 
-    output = output[kernel.shape[0] // 2: -(kernel.shape[0] // 2),
-                    kernel.shape[1] // 2: -(kernel.shape[1] // 2)]
+    output = output[
+        kernel.shape[0] // 2 : -(kernel.shape[0] // 2),
+        kernel.shape[1] // 2 : -(kernel.shape[1] // 2),
+    ]
     return output

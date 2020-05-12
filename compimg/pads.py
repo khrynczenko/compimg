@@ -77,14 +77,12 @@ class ConstantPad(Pad):
             self.apply = lambda x: x
 
     def apply(self, image: np.ndarray) -> np.ndarray:
-        pad_width = [[self._amount, self._amount],
-                     [self._amount, self._amount]]
+        pad_width = [[self._amount, self._amount], [self._amount, self._amount]]
         if image.ndim == 3:
             pad_width.append([0, 0])
-        return np.pad(image,
-                      pad_width,
-                      mode="constant",
-                      constant_values=self._value)
+        return np.pad(
+            image, pad_width, mode="constant", constant_values=self._value
+        )
 
 
 class EdgePad(Pad):
@@ -106,10 +104,7 @@ class EdgePad(Pad):
             self.apply = lambda x: x
 
     def apply(self, image: np.ndarray) -> np.ndarray:
-        pad_width = [[self._amount, self._amount],
-                     [self._amount, self._amount]]
+        pad_width = [[self._amount, self._amount], [self._amount, self._amount]]
         if image.ndim == 3:
             pad_width.append([0, 0])
-        return np.pad(image,
-                      pad_width,
-                      mode="edge")
+        return np.pad(image, pad_width, mode="edge")

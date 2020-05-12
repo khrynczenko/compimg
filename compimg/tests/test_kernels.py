@@ -1,9 +1,11 @@
 import numpy as np
 import pytest
 
-from compimg.exceptions import (KernelBiggerThanImageError,
-                                KernelShapeNotOddError,
-                                KernelNot2DArray)
+from compimg.exceptions import (
+    KernelBiggerThanImageError,
+    KernelShapeNotOddError,
+    KernelNot2DArray,
+)
 from compimg import kernels
 
 
