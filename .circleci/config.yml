@@ -59,6 +59,7 @@ jobs:
           command: |
             . venv/bin/activate
             flake8 compimg
+            flake8 benchmarks
 
       - run:
           name: run black
@@ -122,6 +123,7 @@ jobs:
           command: |
             . venv/bin/activate
             flake8 compimg
+            flake8 benchmarks
 
       - run:
           name: run black
@@ -185,6 +187,7 @@ jobs:
           command: |
             . venv/bin/activate
             flake8 compimg
+            flake8 benchmarks
 
       - run:
           name: run black
